@@ -1,0 +1,48 @@
+# Adaptive Predator Trading System Configuration
+system:
+  name: "adaptive_predator_trading_system"
+  version: "1.0.0"
+  environment: "development"
+  
+data:
+  data_source: "ccxt"  # Options: ccxt, csv, api
+  symbols:
+    - "BTC/USDT"
+    - "ETH/USDT"
+    - "SOL/USDT"
+  timeframe: "1h"
+  lookback_window: 100
+  train_test_split: 0.8
+  
+hypernetwork:
+  latent_dim: 128
+  hidden_layers: [256, 512, 256]
+  dropout_rate: 0.2
+  learning_rate: 0.001
+  
+self_supervised:
+  encoder_type: "transformer"  # Options: transformer, lstm, cnn
+  projection_dim: 64
+  temperature: 0.5
+  contrastive_batch_size: 32
+  
+task_network:
+  input_dim: 64  # Must match self_supervised projection_dim
+  output_dim: 3  # [buy, hold, sell] probabilities
+  hidden_layers: [128, 64]
+  
+training:
+  batch_size: 64
+  epochs: 100
+  early_stopping_patience: 10
+  validation_split: 0.15
+  
+firebase:
+  project_id: "adaptive-predator-trading"
+  collection_name: "trading_sessions"
+  
+logging:
+  level: "INFO"
+  file_path: "logs/trading_system.log"
+  max_file_size_mb: 10
+  backup_count: 5
